@@ -10,6 +10,20 @@ module "vpc" {
   availability_zones   = var.availability_zones
 }
 
+module "nat_gateway" {
+  source            = "./modules/nat_gateway"
+  public_subnet_ids = module.vpc.public_subnet_ids
+}
+
+module "route_tables" {
+  source              = "./modules/route_tables"
+  vpc_id              = module.vpc.vpc_id
+  public_subnet_ids   = module.vpc.public_subnet_ids
+  private_subnet_ids  = module.vpc.private_subnet_ids
+  internet_gateway_id = module.vpc.internet_gateway_id
+  nat_gateway_ids     = module.nat_gateway.nat_gateway_ids
+}
+
 module "security_groups" {
   source = "./modules/security_groups"
   vpc_id = module.vpc.vpc_id

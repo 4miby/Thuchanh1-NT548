@@ -17,3 +17,7 @@ output "public_instance_ips" {
 output "private_instance_ips" {
   value = module.ec2.private_instance_ips
 }
+
+output "default_security_group_id" {
+  value = module.vpc.default_security_group_id
+}
