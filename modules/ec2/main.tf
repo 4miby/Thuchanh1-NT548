@@ -13,10 +13,6 @@ resource "aws_instance" "public" {
                 chown ubuntu /home/ubuntu/.ssh/id_rsa
                 chgrp ubuntu /home/ubuntu/.ssh/id_rsa
                 chmod 600   /home/ubuntu/.ssh/id_rsa
-                echo "starting ansible install"
-                apt-add-repository ppa:ansible/ansible -y
-                apt update
-                apt install ansible -y
                 EOF
 
   tags = {
