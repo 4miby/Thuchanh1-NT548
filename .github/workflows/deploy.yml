@@ -1,0 +1,71 @@
+name: Terraform CI/CD with Checkov
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '/'  # Chỉ chạy nếu có thay đổi trong thư mục terraform
+
+jobs:
+  terraform-checkov:
+    runs-on: ubuntu-latest
+    name: Checkov Security Scan
+
+    steps:
+      # 1. Checkout code từ repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Cài đặt Python để dùng cho Checkov
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      # 3. Cài đặt Checkov
+      - name: Install Checkov
+        run: pip install checkov
+
+      # 4. Chạy Checkov để quét mã Terraform
+      - name: Run Checkov
+        run: checkov -d ./terraform
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: terraform-checkov
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' }}
+    name: Deploy Infrastructure with Terraform
+
+    steps:
+      # 1. Checkout code từ repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Thiết lập AWS credentials cho Terraform
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 3. Thiết lập Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.4.6 # Thay bằng phiên bản Terraform bạn cần
+
+      # 4. Khởi tạo Terraform
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      # 5. Kiểm tra kế hoạch triển khai Terraform
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform
+
+      # 6. Triển khai cơ sở hạ tầng Terraform nếu không có lỗi
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform
