@@ -3,7 +3,7 @@ name: Terraform CI/CD with Checkov
 on:
   push:
     branches:
-      - dev2
+      - dev2  # Trigger khi có code push lên nhánh dev2
 
 permissions:
   id-token: write
@@ -35,11 +35,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     needs: terraform-checkov
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/dev2' }}  # Chạy khi push lên dev2
     name: Deploy Infrastructure with Terraform
 
     steps:
