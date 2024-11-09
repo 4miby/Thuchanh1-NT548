@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '/'  # Chỉ chạy nếu có thay đổi trong thư mục terraform
+      - '**/*.tf' # Chỉ chạy nếu có thay đổi trong thư mục terraform
 
 jobs:
   terraform-checkov:
