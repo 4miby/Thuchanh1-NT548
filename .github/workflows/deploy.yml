@@ -60,14 +60,14 @@ jobs:
       # 4. Khởi tạo Terraform
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform
+        working-directory: .
 
       # 5. Kiểm tra kế hoạch triển khai Terraform
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-        working-directory: ./terraform
+        working-directory: .
 
       # 6. Triển khai cơ sở hạ tầng Terraform nếu không có lỗi
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        working-directory: ./terraform
+        working-directory: .
