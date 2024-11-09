@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - '**/*.tf' # Chỉ chạy nếu có thay đổi trong thư mục terraform
+      
+permissions:
+  id-token: write  # This grants permission to request an OIDC token.
 
 jobs:
   terraform-checkov:
