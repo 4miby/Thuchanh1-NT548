@@ -3,7 +3,7 @@ name: Terraform CI/CD with Checkov
 on:
   push:
     branches:
-      - main
+      - dev2
 
 permissions:
   id-token: write
