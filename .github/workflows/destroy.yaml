@@ -32,9 +32,9 @@ jobs:
       # 4. Khởi tạo Terraform
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform
+        working-directory: .
 
       # 5. Thực hiện hủy cơ sở hạ tầng với Terraform
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./terraform
+        working-directory: .
