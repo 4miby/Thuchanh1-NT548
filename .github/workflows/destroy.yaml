@@ -6,11 +6,20 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
+
 jobs:
   terraform-destroy:
     runs-on: ubuntu-latest
     name: Destroy Infrastructure with Terraform
+    env:
+      TF_VAR_github_workspace: ${{ github.workspace }}
+      TF_LOG: INFO
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
