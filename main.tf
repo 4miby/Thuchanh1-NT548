@@ -2,6 +2,28 @@ provider "aws" {
   region = var.region
 }
 
+terraform {
+  backend "s3" {
+    bucket         = module.s3_bucket.bucket_name
+    key            = "tf-state" 
+    region         = "us-east-1"                    
+    #dynamodb_table = "terraform-lock-table" 
+    encrypt        = true
+  }
+}
+
+# main.tf (ở cấp dự án chính)
+
+module "s3_bucket" {
+  source              = "./modules/s3_bucket"
+  bucket_name         = "my-terraform-s3-bucket"  # Thay bằng tên bạn muốn
+  acl                 = "private"
+  versioning_enabled  = true
+  sse_algorithm       = "AES256"
+  expiration_days     = 365
+  tags = {}
+}
+
 module "vpc" {
   source               = "./modules/vpc"
   vpc_cidr             = var.vpc_cidr

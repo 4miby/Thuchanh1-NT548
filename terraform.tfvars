@@ -9,3 +9,4 @@ ami_id               = "ami-0866a3c8686eaeeba"
 instance_type        = "t2.micro"
 public_instance_count  = 1
 private_instance_count = 1
+bucket_name            = "terraform-state-bucket"
