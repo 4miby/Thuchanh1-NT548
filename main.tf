@@ -1,25 +1,23 @@
-provider "aws" {
-  region = var.region
-}
-
 terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+    tls = {
+      source = "hashicorp/tls"
+    }
+  }
   backend "s3" {
-    bucket         = "terraform-state-bucket"
+    bucket         = "terraform-ops-s3-backend"
     key            = "tf-state" 
     region         = "us-east-1"                    
     #dynamodb_table = "terraform-lock-table" 
-    encrypt        = true
   }
 }
 
-module "s3_bucket" {
-  source              = "./modules/s3_backend"
-  bucket_name         = var.bucket_name  
-  acl                 = "private"
-  versioning_enabled  = true
-  sse_algorithm       = "AES256"
-  expiration_days     = 365
-  tags = {}
+provider "aws" {
+  region = var.region
 }
 
 module "vpc" {
