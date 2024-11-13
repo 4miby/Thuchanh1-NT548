@@ -62,7 +62,7 @@ jobs:
 
       # 4. Khởi tạo Terraform
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -upgrade
         working-directory: .
 
       # 5. Kiểm tra kế hoạch triển khai Terraform
