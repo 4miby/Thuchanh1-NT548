@@ -8,14 +8,6 @@ resource "aws_s3_bucket" "this" {
     enabled = var.versioning_enabled
   }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = var.sse_algorithm
-      }
-    }
-  }
-
   lifecycle_rule {
     enabled = true
 

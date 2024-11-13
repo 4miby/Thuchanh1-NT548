@@ -17,12 +17,6 @@ variable "versioning_enabled" {
   default     = true
 }
 
-variable "sse_algorithm" {
-  description = "server-side encryption algorithm"
-  type        = string
-  default     = "AES256"
-}
-
 variable "expiration_days" {
   description = ""
   type        = number
