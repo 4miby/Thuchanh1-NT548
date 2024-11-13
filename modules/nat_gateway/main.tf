@@ -1,6 +1,5 @@
 resource "aws_eip" "nat" {
   count  = length(var.public_subnet_ids)
-  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "main" {
