@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket         = var.bucket_name
+    bucket         = "terraform-state-bucket"
     key            = "tf-state" 
     region         = "us-east-1"                    
     #dynamodb_table = "terraform-lock-table" 
@@ -12,11 +12,9 @@ terraform {
   }
 }
 
-# main.tf (ở cấp dự án chính)
-
 module "s3_bucket" {
   source              = "./modules/s3_backend"
-  bucket_name         = var.bucket_name  # Thay bằng tên bạn muốn
+  bucket_name         = var.bucket_name  
   acl                 = "private"
   versioning_enabled  = true
   sse_algorithm       = "AES256"
