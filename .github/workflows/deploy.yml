@@ -8,6 +8,7 @@ on:
       - '**'
 
 permissions:
+  id-token: write
   contents: read
   pull-requests: write
 
@@ -33,7 +34,7 @@ jobs:
 
       # 4. Chạy Checkov để quét mã Terraform
       - name: Run Checkov
-        run: checkov -d ./terraform
+        run: checkov -d .
 
   deploy:
     runs-on: ubuntu-latest
