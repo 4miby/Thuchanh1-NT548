@@ -5,12 +5,6 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "acl" {
-  description = "acl"
-  type        = string
-  default     = "private"
-}
-
 variable "versioning_enabled" {
   description = "versioning option"
   type        = bool
