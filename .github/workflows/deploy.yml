@@ -9,31 +9,19 @@ on:
 
 jobs:
   terraform-checkov:
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
     runs-on: ubuntu-latest
-    name: Checkov Security Scan
-
     steps:
-      # 1. Checkout code từ repository
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 2. Cài đặt Python để dùng cho Checkov
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-
-      # 3. Cài đặt Checkov
-      - name: Install Checkov
-        run: pip install checkov
-
-      # 4. Chạy Checkov để quét mã Terraform
-      - name: Run Checkov
-        run: checkov -d .
+          python-version: 3.8
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform 
 
   deploy:
     permissions:
