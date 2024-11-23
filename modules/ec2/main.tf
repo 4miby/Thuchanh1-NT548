@@ -27,7 +27,7 @@ resource "aws_instance" "private" {
   subnet_id              = var.private_subnet_ids[count.index]
   vpc_security_group_ids = [var.private_sg_id]
   key_name               = var.key_name
-  
+  associate_public_ip_address = false
   tags = {
     Name = "Private EC2 ${count.index + 1}"
   }
