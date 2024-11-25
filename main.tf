@@ -1,3 +1,21 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+    tls = {
+      source = "hashicorp/tls"
+    }
+  }
+  backend "s3" {
+    bucket         = "terraform-ops-s3-backend"
+    key            = "tf-state" 
+    region         = "us-east-1"                    
+    #dynamodb_table = "terraform-lock-table" 
+  }
+}
+
 provider "aws" {
   region = var.region
 }
@@ -24,6 +42,7 @@ module "route_tables" {
   nat_gateway_ids     = module.nat_gateway.nat_gateway_ids
 }
 
+//test
 module "security_groups" {
   source = "./modules/security_groups"
   vpc_id = module.vpc.vpc_id

@@ -3,35 +3,42 @@ name: Terraform Destroy
 on:
   workflow_dispatch:  # Cho phép chạy workflow thủ công khi cần destroy
 
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
 jobs:
   terraform-destroy:
     runs-on: ubuntu-latest
     name: Destroy Infrastructure with Terraform
+    env:
+      TF_VAR_github_workspace: ${{ github.workspace }}
+      TF_LOG: INFO
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
-      # 1. Checkout code từ repository
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 2. Thiết lập AWS credentials cho Terraform
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 3. Thiết lập Terraform
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
+ 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.4.6 # Thay bằng phiên bản Terraform bạn cần
+          terraform_version: 1.5q.5
 
-      # 4. Khởi tạo Terraform
       - name: Terraform Init
+        id: init
         run: terraform init
-        working-directory: ./terraform
-
-      # 5. Thực hiện hủy cơ sở hạ tầng với Terraform
+      
       - name: Terraform Destroy
+        id: destroy
         run: terraform destroy -auto-approve
-        working-directory: ./terraform

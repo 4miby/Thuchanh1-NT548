@@ -4,6 +4,7 @@ resource "aws_instance" "public" {
   instance_type          = var.instance_type
   subnet_id              = var.public_subnet_ids[count.index]
   vpc_security_group_ids = [var.public_sg_id]
+  ebs_optimized          = true  #EBS optimization
   key_name               = var.key_name
   user_data = <<-EOF
                 #!bin/bash
@@ -26,8 +27,9 @@ resource "aws_instance" "private" {
   instance_type          = var.instance_type
   subnet_id              = var.private_subnet_ids[count.index]
   vpc_security_group_ids = [var.private_sg_id]
+  ebs_optimized          = true  #EBS optimization
   key_name               = var.key_name
-  
+  associate_public_ip_address = false
   tags = {
     Name = "Private EC2 ${count.index + 1}"
   }
